@@ -11,15 +11,20 @@ function roomRetract(facts, cb)
 end
 
 local mac = wifi.sta.getmac()
-roomAssert({'"'..mac..'" got ip "'..wifi.sta.getip()..'"'})
+roomAssert({'"'..mac..'" got ip "'..wifi.sta.getip()..'"',
+            'mcuManager is active'}, function (status, x)
+
+if status == -1 then print(status, x) return end
 
 -- Check the ADC and assert its value every so often.
 local adctmr = tmr.create()
 local seq = 0
-adctmr:alarm(1000, tmr.ALARM_SEMI, function ()
+adctmr:alarm(100, tmr.ALARM_SEMI, function ()
   roomAssert({'"'..mac..'" has analog value '..adc.read(0)..' @ '..seq}, function (status, x)
     if status == -1 then print(status, x) return end
     seq = seq + 1
     adctmr:start()
   end)
+end)
+
 end)
