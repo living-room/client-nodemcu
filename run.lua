@@ -13,7 +13,7 @@ end
 local mac = wifi.sta.getmac()
 roomAssert({'"'..mac..'" got ip "'..wifi.sta.getip()..'"'})
 
--- Check the ADC every 80 ms.
+-- Check the ADC and assert its value every so often.
 local adctmr = tmr.create()
 local seq = 0
 adctmr:alarm(1000, tmr.ALARM_SEMI, function ()
